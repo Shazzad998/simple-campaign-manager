@@ -41,3 +41,79 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+
+export interface ResourceData {
+    data: any[];
+    meta: {
+        current_page: number;
+        from: number;
+        last_page: number;
+        links: any[];
+        path: string;
+        per_page: number;
+        to: number;
+        total: number;
+    };
+}
+export interface DataTableColumn {
+    title: string;
+    field: string;
+    sortable?: boolean;
+    render?: (item: any) => React.ReactNode;
+    actions?: (item: any) => DataTableAction[];
+}
+
+export interface DataTableAction {
+    label: string;
+    icon?: React.ReactNode;
+    onClick: (item: any) => void;
+    className?: string;
+}
+export interface DataTableBulkAction {
+    label: string;
+    icon?: React.ReactNode;
+    onClick: (selectedIds: number[]) => void;
+    className?: string;
+}
+
+export interface DataTableProps {
+    resource: ResourceData;
+    selected: number[];
+    setSelected: (selected: number[]) => void;
+    selectedAll: boolean;
+    setSelectedAll: (selected: boolean) => void;
+    columns: DataTableColumn[];
+    list_route: string;
+    bulkActions?: DataTableBulkAction[];
+    actions?: DataTableAction[];
+}
+export type SelectOption = {
+    label: string;
+    value: string;
+    description?: string;
+    image?: string;
+};
+
+export interface Filters {
+    search: string;
+    sort_by: string;
+    sort_direction: string;
+    per_page: number;
+    page: number;
+    from: string;
+    to: string;
+}
+
+export interface confirmDeleteItem {
+    id: number;
+    [key: string]: any;
+}
+
+export interface Flash {
+    success: string;
+    info: string;
+    warning: string;
+    error: string;
+}
+
