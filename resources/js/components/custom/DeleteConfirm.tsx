@@ -21,7 +21,7 @@ const DeleteConfirm = ({
 }: DeleteConfirmProps) => {
     return (
         <Dialog open={open} onOpenChange={opOpenChange}>
-            <DialogContent aria-describedby="Delete Confirmattion">
+            <DialogContent aria-describedby="Delete Confirmattion" className="top-32 ">
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>

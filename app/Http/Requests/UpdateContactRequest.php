@@ -11,7 +11,7 @@ class UpdateContactRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:contacts,email,' . $this->route('contact')
+            ],
         ];
     }
 }

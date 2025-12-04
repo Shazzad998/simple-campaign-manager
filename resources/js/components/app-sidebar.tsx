@@ -11,9 +11,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import contacts from '@/routes/contacts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -22,11 +23,14 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Contacts',
+        href: contacts.index(),
+        icon: Users,
+    },
 ];
 
-const footerNavItems: NavItem[] = [
-
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     return (

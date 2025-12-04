@@ -1,23 +1,75 @@
+import DataTable from '@/components/custom/DataTable';
+import DeleteConfirm from '@/components/custom/DeleteConfirm';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
+import contacts from '@/routes/contacts';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+import { UserPlus2 } from 'lucide-react';
+import Form from './Form';
+import useContacts from './partials/useContacts';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: dashboard().url,
     },
+    {
+        title: 'Customers',
+        href: '',
+    },
 ];
-type Props = {
-    
-};
 
-const Index = (props: Props) => {
+const Index = () => {
+    const {
+        contacts_resource,
+        formOpen,
+        setFormOpen,
+        contact,
+        setContact,
+        selectedItems,
+        setSelectedItems,
+        selectedAllItems,
+        setSelectedAllItems,
+        bulkActions,
+        deleteItem,
+        deleteDialogOpen,
+        setDeleteDialogOpen,
+        columns,
+        handleCreate,
+    } = useContacts();
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"></div>
+            <Head title="Contacts" />
+
+            <DeleteConfirm
+                open={deleteDialogOpen}
+                opOpenChange={setDeleteDialogOpen}
+                onConfirm={deleteItem}
+            />
+
+            <Form open={formOpen} onOpenChange={setFormOpen} contact={contact}/>
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl font-bold">Contacts</h1>
+                        <Button onClick={handleCreate}>
+                            <UserPlus2 /> Add Contact
+                        </Button>
+                    </div>
+                </div>
+                <DataTable
+                    resource={contacts_resource}
+                    selected={selectedItems}
+                    setSelected={setSelectedItems}
+                    selectedAll={selectedAllItems}
+                    setSelectedAll={setSelectedAllItems}
+                    columns={columns}
+                    list_route={contacts.index().url}
+                    bulkActions={bulkActions}
+                />
+            </div>
         </AppLayout>
     );
 };

@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('contacts', ContactController::class);
+    Route::post('contacts/bulk-delete', [ContactController::class, 'bulkDelete'])->name('contacts.bulk-delete');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

@@ -12,8 +12,8 @@ type TableColumnHeaderProps = {
     className?:string
     title:string
     field:string
-    sort_by:string
-    sort_direction:string
+    sort_by?:string
+    sort_direction?:string
     setSortBy: (sort_by: string) => void
     setSortDirection: (sort_direction: string) => void
 }

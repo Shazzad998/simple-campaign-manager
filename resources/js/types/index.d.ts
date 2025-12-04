@@ -79,10 +79,10 @@ export interface DataTableBulkAction {
 
 export interface DataTableProps {
     resource: ResourceData;
-    selected: number[];
-    setSelected: (selected: number[]) => void;
-    selectedAll: boolean;
-    setSelectedAll: (selected: boolean) => void;
+    selected?: number[];
+    setSelected?: (selected: number[]) => void;
+    selectedAll?: boolean;
+    setSelectedAll?: (selected: boolean) => void;
     columns: DataTableColumn[];
     list_route: string;
     bulkActions?: DataTableBulkAction[];

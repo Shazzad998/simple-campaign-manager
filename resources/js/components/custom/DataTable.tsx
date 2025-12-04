@@ -45,8 +45,10 @@ const DataTable = ({
     const filters = usePage().props.filters as Filters;
     const ids = usePage().props.ids as number[];
     const [search, setSearch] = useState(filters.search || '');
-    const [sort_by, setSortBy] = useState(filters.sort_by);
-    const [sort_direction, setSortDirection] = useState(filters.sort_direction);
+    const [sort_by, setSortBy] = useState<undefined | string>(filters.sort_by);
+    const [sort_direction, setSortDirection] = useState<undefined | string>(
+        filters.sort_direction,
+    );
     const [per_page, setPerPage] = useState(filters.per_page);
     const [page, setPage] = useState(filters.page);
     const [date, setDate] = useState<DateRange | undefined>(
@@ -85,28 +87,50 @@ const DataTable = ({
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
-            setSelected(resource.data.map((item) => item.id));
+            const ids = resource.data.map((item) => item.id);
+            setSelected?.(ids);
+            if (ids.length == resource.data.length) {
+                setSelectedAll?.(true);
+            }
         } else {
-            setSelectedAll(false);
-            setSelected([]);
+            setSelectedAll?.(false);
+            setSelected?.([]);
         }
     };
 
     const handleSelect = (id: number) => {
+        if (selected == undefined) return;
         if (selected.includes(id)) {
-            setSelected(selected.filter((item) => item !== id));
+            setSelected?.(selected.filter((item) => item !== id));
         } else {
-            setSelected([...selected, id]);
+            setSelected?.([...selected, id]);
         }
     };
 
     const handleSelectAllItems = () => {
-        setSelectedAll(!selectedAll);
+        setSelectedAll?.(!selectedAll);
         if (!selectedAll) {
-            setSelected(ids);
+            setSelected?.(ids);
         } else {
-            setSelected([]);
+            setSelected?.([]);
         }
+    };
+
+    const hasFilters =
+        search !== '' ||
+        from !== '' ||
+        to !== '' ||
+        sort_by !== undefined ||
+        sort_direction !== undefined;
+
+    const formatLocalDate = (d: Date | undefined) => {
+        if (!d) return '';
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
     };
 
     return (
@@ -123,13 +147,13 @@ const DataTable = ({
                             date={date}
                             setDate={setDate}
                             onApply={() => {
-                                setFrom(date?.from?.toISOString() || '');
-                                setTo(date?.to?.toISOString() || '');
+                                setFrom(formatLocalDate(date?.from));
+                                setTo(formatLocalDate(date?.to));
                             }}
                         />
                     </div>
 
-                    {selected.length > 0 && (
+                    {selected && selected.length > 0 && (
                         <div className="flex items-center gap-3 text-gray-500">
                             {bulkActions.length > 0 && (
                                 <DropdownMenu>
@@ -173,6 +197,34 @@ const DataTable = ({
                             </div>
                         </div>
                     )}
+
+                    {hasFilters && (
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                setSearch('');
+                                setDate(undefined);
+                                setFrom('');
+                                setTo('');
+                                setSortBy(undefined);
+                                setSortDirection(undefined);
+                                setPage(1);
+
+                                router.get(
+                                    list_route,
+                                    { page: 1, per_page },
+                                    {
+                                        preserveState: true,
+                                        preserveScroll: true,
+                                        replace: true,
+                                        only: ['data', 'ids'],
+                                    },
+                                );
+                            }}
+                        >
+                            Clear Filters
+                        </Button>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -202,23 +254,26 @@ const DataTable = ({
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                {bulkActions.length > 0 && (
-                                                    <TableHead className="w-8 text-center">
-                                                        <Checkbox
-                                                            checked={
-                                                                selected.length >=
+                                                {bulkActions.length > 0 &&
+                                                    selected && (
+                                                        <TableHead className="w-8 text-center">
+                                                            <Checkbox
+                                                                checked={
+                                                                    selected.length >=
+                                                                        resource
+                                                                            .data
+                                                                            .length &&
                                                                     resource
                                                                         .data
-                                                                        .length &&
-                                                                resource.data
-                                                                    .length != 0
-                                                            }
-                                                            onCheckedChange={
-                                                                handleSelectAll
-                                                            }
-                                                        />
-                                                    </TableHead>
-                                                )}
+                                                                        .length !=
+                                                                        0
+                                                                }
+                                                                onCheckedChange={
+                                                                    handleSelectAll
+                                                                }
+                                                            />
+                                                        </TableHead>
+                                                    )}
 
                                                 {columns.map(
                                                     (column, index) => (
@@ -236,7 +291,7 @@ const DataTable = ({
                                                             ) : (
                                                                 <TableHead
                                                                     key={index}
-                                                                    className="whitespace-nowrap pl-4"
+                                                                    className="pl-4 whitespace-nowrap"
                                                                 >
                                                                     {column.sortable !==
                                                                     false ? (
@@ -275,20 +330,21 @@ const DataTable = ({
                                                 resource.data.map((item) => (
                                                     <TableRow key={item.id}>
                                                         {bulkActions.length >
-                                                            0 && (
-                                                            <TableCell className="w-8 text-center">
-                                                                <Checkbox
-                                                                    checked={selected.includes(
-                                                                        item.id,
-                                                                    )}
-                                                                    onCheckedChange={() =>
-                                                                        handleSelect(
+                                                            0 &&
+                                                            selected && (
+                                                                <TableCell className="w-8 text-center">
+                                                                    <Checkbox
+                                                                        checked={selected.includes(
                                                                             item.id,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </TableCell>
-                                                        )}
+                                                                        )}
+                                                                        onCheckedChange={() =>
+                                                                            handleSelect(
+                                                                                item.id,
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </TableCell>
+                                                            )}
 
                                                         {columns.map(
                                                             (column, index) => {
@@ -300,13 +356,22 @@ const DataTable = ({
                                                                           )
                                                                         : [];
                                                                 return (
-                                                                    <Fragment key={index}>
+                                                                    <Fragment
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
                                                                         {column.field ==
                                                                         'action' ? (
                                                                             <>
                                                                                 {rowActions.length >
                                                                                     0 && (
-                                                                                    <TableCell className="w-20 text-center pl-2" key={index}>
+                                                                                    <TableCell
+                                                                                        className="w-20 pl-2 text-center"
+                                                                                        key={
+                                                                                            index
+                                                                                        }
+                                                                                    >
                                                                                         <DropdownMenu>
                                                                                             <DropdownMenuTrigger
                                                                                                 asChild
@@ -361,12 +426,16 @@ const DataTable = ({
                                                                                 )}
                                                                             </>
                                                                         ) : (
-                                                                            <Fragment key={index}>
+                                                                            <Fragment
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                            >
                                                                                 <TableCell
                                                                                     key={
                                                                                         index
                                                                                     }
-                                                                                    className="whitespace-nowrap pl-4"
+                                                                                    className="pl-4 whitespace-nowrap"
                                                                                 >
                                                                                     {column.render
                                                                                         ? column.render(
