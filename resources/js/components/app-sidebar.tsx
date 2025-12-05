@@ -14,8 +14,9 @@ import { dashboard } from '@/routes';
 import contacts from '@/routes/contacts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Users } from 'lucide-react';
+import { LayoutGrid, Mails, Users } from 'lucide-react';
 import AppLogo from './app-logo';
+import campaigns from '@/routes/campaigns';
 
 const mainNavItems: NavItem[] = [
     {
@@ -27,6 +28,11 @@ const mainNavItems: NavItem[] = [
         title: 'Contacts',
         href: contacts.index(),
         icon: Users,
+    },
+    {
+        title: 'Campaigns',
+        href: campaigns.index(),
+        icon: Mails,
     },
 ];
 

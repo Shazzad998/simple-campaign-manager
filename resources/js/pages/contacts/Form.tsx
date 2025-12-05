@@ -38,7 +38,6 @@ const Form = ({ open, onOpenChange, contact }: Props) => {
     }, [contact]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        console.log('test');
         e.preventDefault();
         if (contact) {
             put(contacts.update(contact.id).url, {

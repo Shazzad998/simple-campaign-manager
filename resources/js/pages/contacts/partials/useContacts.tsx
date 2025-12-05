@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { getInitials } from '@/lib/utils';
 import contacts from '@/routes/contacts';
 import {
@@ -89,11 +90,11 @@ export default function useContacts() {
         {
             title: 'Name',
             field: 'name',
-            render: (item: User) => {
+            render: (item: Contact) => {
                 return (
                     <div className="flex gap-1">
                         <Avatar className="h-8 w-8 overflow-hidden rounded-md">
-                            <AvatarImage src={item.avatar} alt={item.name} />
+                            <AvatarImage src={item.name} alt={item.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(item.name)}
                             </AvatarFallback>
@@ -110,6 +111,14 @@ export default function useContacts() {
                 );
             },
         },
+        {
+            title:'Created At',
+            field:'created_at',
+            sortable:false,
+            render:(item: Contact) => {
+                return (<Badge variant={'outline'}>{item.created_at}</Badge>)
+            }
+        }
     ];
 
     return {
