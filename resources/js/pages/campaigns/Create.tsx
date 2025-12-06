@@ -1,11 +1,11 @@
 import { MultiSelect } from '@/components/custom/MultiSelect';
 import InputError from '@/components/input-error';
+import { TipTap } from '@/components/TipTap';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import campaigns from '@/routes/campaigns';
@@ -67,7 +67,7 @@ const Create = ({ contactOptions }: CreateProps) => {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-2xl font-bold">Add Campaign</h1>
+                        <div className="text-2xl font-bold">Add Campaign</div>
                         <Link href={campaigns.index().url}>
                             <Button variant="outline">
                                 <List className="mr-2 h-4 w-4" />
@@ -84,6 +84,22 @@ const Create = ({ contactOptions }: CreateProps) => {
                         </CardHeader>
                         <CardContent>
                             <div className="grid gap-4">
+                                {/* Recipients */}
+                                <div className="grid content-start gap-2">
+                                    <Label htmlFor="recipients">Contacts</Label>
+                                    <div className="grid gap-px">
+                                        <MultiSelect
+                                            options={contactOptions}
+                                            selected={selectedUsers}
+                                            setSelected={setSelectedUsers}
+                                            placeholder="Select Contacts"
+                                        />
+                                        <InputError
+                                            message={errors.recipients}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                </div>
                                 {/* Subject */}
                                 <div className="grid content-start gap-2">
                                     <Label htmlFor="subject">Subject</Label>
@@ -107,37 +123,27 @@ const Create = ({ contactOptions }: CreateProps) => {
                                 <div className="grid content-start gap-2">
                                     <Label htmlFor="body">Campaign Body</Label>
                                     <div className="grid gap-px">
-                                        <Textarea
+                                        <TipTap
+                                            content={data.body}
+                                            onChange={(value) => setData('body', value)}
+                                            placeholder="Start typing your content here..."
+                                            className="min-h-[400px]"
+                                        />
+
+                                        {/* <Textarea
                                             value={data.body}
                                             onChange={(e) =>
                                                 setData('body', e.target.value)
                                             }
                                             placeholder="Enter campaign body"
-                                        />
+                                        /> */}
                                         <InputError message={errors.body} />
-                                    </div>
-                                </div>
-
-                                {/* Recipients */}
-                                <div className="grid content-start gap-2">
-                                    <Label htmlFor="recipients">Contacts</Label>
-                                    <div className="grid gap-px">
-                                        <MultiSelect
-                                            options={contactOptions}
-                                            selected={selectedUsers}
-                                            setSelected={setSelectedUsers}
-                                            placeholder="Select Contacts"
-                                        />
-                                        <InputError
-                                            message={errors.recipients}
-                                            className="mt-2"
-                                        />
                                     </div>
                                 </div>
                             </div>
                             <div className="flex items-center justify-end gap-8 pt-4">
                                 <Button type="submit" disabled={processing}>
-                                    {processing && <Spinner />} Send <Send/>
+                                    {processing && <Spinner />} Send <Send />
                                 </Button>
                             </div>
                         </CardContent>

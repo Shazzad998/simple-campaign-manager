@@ -8,7 +8,7 @@ import {
     User,
 } from '@/types';
 import { CampaignListItem } from '@/types/app';
-import { router, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Eye } from 'lucide-react';
 import { useState } from 'react';
 
@@ -54,7 +54,7 @@ export default function useCampaigns() {
             field: 'subject',
             render: (item: CampaignListItem) => {
                 return (
-                    <span className="truncate font-medium">{item.subject}</span>
+                    <Link href={campaigns.show(item.id)} className="truncate font-medium" >{item.subject}</Link>
                 );
             },
         },

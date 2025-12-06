@@ -171,25 +171,25 @@
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
 
-      /* Custom */
+    /* Custom */
 
-  --blue: oklch(0.488 0.243 264.376);
-  --blue-foreground: oklch(0.97 0.014 254.604);
+    --blue: oklch(0.488 0.243 264.376);
+    --blue-foreground: oklch(0.97 0.014 254.604);
 
-  --green: oklch(0.648 0.2 131.684);
-  --green-foreground: oklch(0.986 0.031 120.757);
+    --green: oklch(0.648 0.2 131.684);
+    --green-foreground: oklch(0.986 0.031 120.757);
 
-  --orange: oklch(0.705 0.213 47.604);
-  --orange-foreground: oklch(0.98 0.016 73.684);
+    --orange: oklch(0.705 0.213 47.604);
+    --orange-foreground: oklch(0.98 0.016 73.684);
 
-  --red: oklch(0.637 0.237 25.331);
-  --red-foreground: oklch(0.971 0.013 17.38);
+    --red: oklch(0.637 0.237 25.331);
+    --red-foreground: oklch(0.971 0.013 17.38);
 
-  --rose: oklch(0.645 0.246 16.439);
-  --rose-foreground: oklch(0.969 0.015 12.422);
+    --rose: oklch(0.645 0.246 16.439);
+    --rose-foreground: oklch(0.969 0.015 12.422);
 
-  --yellow: oklch(0.795 0.184 86.047);
-  --yellow-foreground: oklch(0.421 0.095 57.708);
+    --yellow: oklch(0.795 0.184 86.047);
+    --yellow-foreground: oklch(0.421 0.095 57.708);
 }
 
 @layer base {
@@ -199,5 +199,24 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+
+    h1 {
+        @apply text-4xl font-bold;
+    }
+    h2 {
+        @apply text-3xl font-semibold;
+    }
+    h3 {
+        @apply text-2xl font-semibold;
+    }
+    h4 {
+        @apply text-xl font-medium;
+    }
+    h5 {
+        @apply text-lg font-medium;
+    }
+    h6 {
+        @apply text-base font-medium;
     }
 }

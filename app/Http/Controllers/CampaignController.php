@@ -14,6 +14,7 @@ use App\Services\CampaignService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Stevebauman\Purify\Facades\Purify;
 
 class CampaignController extends Controller
 {
@@ -73,7 +74,7 @@ class CampaignController extends Controller
         try {
             $data = new CampaignData(
                 $validated['subject'],
-                $validated['body'],
+                Purify::clean($validated['body']),
                 $validated['recipients']
             );
 
