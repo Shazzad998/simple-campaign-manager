@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import campaigns from '@/routes/campaigns';
 import {
     confirmDeleteItem,
@@ -10,7 +11,6 @@ import {
 import { CampaignListItem } from '@/types/app';
 import { Link, router, usePage } from '@inertiajs/react';
 import { Eye } from 'lucide-react';
-import { useState } from 'react';
 
 export default function useCampaigns() {
 
@@ -62,6 +62,17 @@ export default function useCampaigns() {
         {
             title: 'Recipients',
             field: 'recipient_count',
+            render:(item:CampaignListItem) => (<Badge variant={'outline'}>{item.recipient_count}</Badge>)
+        },
+        {
+            title: 'Success',
+            field: 'success_count',
+            render:(item:CampaignListItem) => (<Badge variant={'outline'}>{item.success_count}</Badge>)
+        },
+        {
+            title: 'Failed',
+            field: 'failed_count',
+            render:(item:CampaignListItem) => (<Badge variant={'outline'}>{item.failed_count}</Badge>)
         },
         {
             title: 'Created At',

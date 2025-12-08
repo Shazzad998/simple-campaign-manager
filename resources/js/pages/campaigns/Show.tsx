@@ -8,7 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import {
     Table,
     TableBody,
@@ -18,7 +17,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { cn, getInitials } from '@/lib/utils';
+import { getInitials } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import campaigns from '@/routes/campaigns';
 import { BreadcrumbItem } from '@/types';
@@ -93,7 +92,6 @@ const Show = ({ campaign }: Props) => {
                         {/* <Separator className="" /> */}
 
                         <CardContent>
-
                             <div className="flex flex-col gap-4">
                                 <div className="rounded-md border">
                                     <div className="relative w-full">
@@ -120,7 +118,7 @@ const Show = ({ campaign }: Props) => {
                                                                 </TableHead>
                                                             </TableRow>
                                                         </TableHeader>
-                                                        
+
                                                         <TableBody>
                                                             {campaign.recipients.map(
                                                                 (recipient) => (
@@ -156,7 +154,7 @@ const Show = ({ campaign }: Props) => {
                                                                                     </Avatar>
                                                                                 )}
                                                                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                                                                    <span className=" font-medium">
+                                                                                    <span className="font-medium">
                                                                                         {
                                                                                             recipient
                                                                                                 .contact
@@ -175,43 +173,42 @@ const Show = ({ campaign }: Props) => {
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             <Badge
-                                                                            variant={'outline'}
-                                                                                className={cn(
-                                                                                    ' capitalize',
-                                                                                    recipient.status ===
-                                                                                        'sent' &&
-                                                                                        'border-green bg-green/10 text-green',
-                                                                                    recipient.status ===
-                                                                                        'pending' &&
-                                                                                        'border-yellow bg-yellow/10 text-yellow',
-                                                                                    recipient.status ===
-                                                                                        'failed' &&
-                                                                                        'border-red bg-red/10 text-red',
-                                                                                )}
+                                                                                variant={
+                                                                                    recipient.status ==
+                                                                                    'failed'
+                                                                                        ? 'destructive'
+                                                                                        : recipient.status ==
+                                                                                            'pending'
+                                                                                          ? 'secondary'
+                                                                                          : 'outline'
+                                                                                }
+                                                                                className=' capitalize'
                                                                             >
-                                                                                {recipient.status}
+                                                                                {
+                                                                                    recipient.status
+                                                                                }
                                                                             </Badge>
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             {recipient.sent_at && (
-
-                                                                            <Badge
-                                                                            variant={'outline'}
-                                                                                
-                                                                            >
-                                                                                
-                                                                                {recipient.sent_at}
-                                                                            </Badge>
+                                                                                <Badge
+                                                                                    variant={
+                                                                                        'outline'
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        recipient.sent_at
+                                                                                    }
+                                                                                </Badge>
                                                                             )}
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             {recipient.response && (
-
-                                                                            <Badge
-                                                                                
-                                                                            >
-                                                                                {recipient.response}
-                                                                            </Badge>
+                                                                                <Badge variant={'secondary'}>
+                                                                                    {
+                                                                                        recipient.response
+                                                                                    }
+                                                                                </Badge>
                                                                             )}
                                                                         </TableCell>
                                                                     </TableRow>

@@ -27,6 +27,11 @@ class CampaignController extends Controller
     {
 
         $query = Campaign::query()
+            ->withCount([
+                'recipients as recipient_count',
+                'recipients as success_count' => fn($q) => $q->where('status', 'sent'),
+                'recipients as failed_count'  => fn($q) => $q->where('status', 'failed'),
+            ])
             ->when($request->search, function ($query, $search) {
                 $query->where('subject', 'like', "%{$search}%")
                     ->orWhere('body', 'like', "%{$search}%");

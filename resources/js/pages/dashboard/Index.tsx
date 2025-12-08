@@ -2,25 +2,28 @@ import { Badge } from '@/components/ui/badge';
 import {
     Card,
     CardAction,
-    CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
-} from '@/components/ui/chart';
+import { ChartConfig } from '@/components/ui/chart';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
+import { CampaignListItem } from '@/types/app';
 import { Head, usePage } from '@inertiajs/react';
-import { Mails, TrendingUp, Users2 } from 'lucide-react';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import {
+    MailCheck,
+    Mails,
+    MailX,
+    Send,
+    TrendingUp,
+    Users2,
+} from 'lucide-react';
+import EmailActiviryChart, {
+    emailActivityChartDataProps,
+} from './EmailActiviryChart';
+import RecentCampaignsTable from './RecentCampaignsTable';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,14 +32,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-type emailActivityChartDataProps = {
-    day: string;
-    sent: number;
-    failed: number;
-};
-
 export default function Dashboard() {
     const stats = usePage().props.stats as any;
+    const recentCampaigns = usePage().props
+        .recentCampaigns as CampaignListItem[];
+    const emailDeliveryRate = usePage().props.emailDeliveryRate as {
+        sent: number;
+        failed: number;
+        delivery_rate: number;
+    };
 
     const emailActivityChartData = usePage().props
         .emailActivity as emailActivityChartDataProps[];
@@ -56,7 +60,33 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ">
+                    <Card>
+                        <CardHeader>
+                            <CardDescription>
+                                Email Delivery Rate
+                            </CardDescription>
+                            <CardTitle className="flex items-center gap-2 text-2xl">
+                                <Send /> {emailDeliveryRate.delivery_rate} %
+                            </CardTitle>
+                            <CardAction>
+                                <Badge variant="outline" className="text-green">
+                                    <MailCheck />
+                                    {emailDeliveryRate.sent}
+                                </Badge>
+                            </CardAction>
+                            <CardDescription className="col-span-2">
+                                <Badge
+                                    variant={'outline'}
+                                    className="text-destructive"
+                                >
+                                    {' '}
+                                    <MailX /> {emailDeliveryRate.failed}{' '}
+                                </Badge>{' '}
+                                failed to send
+                            </CardDescription>
+                        </CardHeader>
+                    </Card>
                     <Card>
                         <CardHeader>
                             <CardDescription>Total Contacts</CardDescription>
@@ -91,51 +121,19 @@ export default function Dashboard() {
                             </CardDescription>
                         </CardHeader>
                     </Card>
-
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <Card >
-                        <CardHeader>
-                            <CardTitle>Email Activiry</CardTitle>
-                            <CardDescription>Last 7 days</CardDescription>
-                        </CardHeader>
-                        <CardContent className=' '>
-                            <ChartContainer
-                                config={emailActivityChartConfig}
-                                className="min-h-[200px] w-full h-64"
-                            >
-                                <BarChart
-                                    accessibilityLayer
-                                    data={emailActivityChartData}
-                                >
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis
-                                        dataKey="day"
-                                        tickLine={false}
-                                        tickMargin={10}
-                                        axisLine={false}
-                                    />
-                                    <ChartTooltip
-                                        content={<ChartTooltipContent />}
-                                    />
-                                    <ChartLegend
-                                        content={<ChartLegendContent />}
-                                    />
-                                    <Bar
-                                        dataKey="sent"
-                                        fill="var(--color-sent)"
-                                        radius={4}
-                                    />
-                                    <Bar
-                                        dataKey="failed"
-                                        fill="var(--color-failed)"
-                                        radius={4}
-                                    />
-                                </BarChart>
-                            </ChartContainer>
-                        </CardContent>
-                    </Card>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-5">
+                    <RecentCampaignsTable
+                        className="xl:col-span-3"
+                        campaignsData={recentCampaigns}
+                    />
+
+                    <EmailActiviryChart
+                        className="xl:col-span-2"
+                        emailActivityChartData={emailActivityChartData}
+                        emailActivityChartConfig={emailActivityChartConfig}
+                    />
                 </div>
             </div>
         </AppLayout>

@@ -26,4 +26,6 @@ export type CampaignListItem = {
   subject: string
   created_at: string
   recipient_count: number
+  success_count: number
+  failed_count: number
 }

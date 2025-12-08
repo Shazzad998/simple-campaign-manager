@@ -18,7 +18,10 @@ class CampaignListResource extends JsonResource
             'id'         => $this->id,
             'subject'    => $this->subject,
             'created_at' => $this->created_at?->format('d M y H:i a'),
-            'recipient_count' => $this->recipients()->count(),
+            'recipient_count' => $this->recipient_count,
+            'success_count'   => $this->success_count,
+            'failed_count'    => $this->failed_count,
+
         ];
     }
 }
