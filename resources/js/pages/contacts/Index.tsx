@@ -38,6 +38,7 @@ const Index = () => {
         setDeleteDialogOpen,
         columns,
         handleCreate,
+        deleteProcessing
     } = useContacts();
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -47,6 +48,7 @@ const Index = () => {
                 open={deleteDialogOpen}
                 opOpenChange={setDeleteDialogOpen}
                 onConfirm={deleteItem}
+                deleteProcessing={deleteProcessing}
             />
 
             <Form open={formOpen} onOpenChange={setFormOpen} contact={contact}/>

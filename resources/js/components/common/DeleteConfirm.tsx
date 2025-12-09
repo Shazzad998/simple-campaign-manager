@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "../ui/button";
 import {
     Dialog,
@@ -7,15 +8,18 @@ import {
     DialogHeader,
     DialogTitle,
 } from "../ui/dialog";
+import { Spinner } from "../ui/spinner";
 
 type DeleteConfirmProps = {
     open: boolean;
+    deleteProcessing: boolean;
     opOpenChange: (value: boolean) => void;
     onConfirm: () => void;
 };
 
 const DeleteConfirm = ({
     open,
+    deleteProcessing,
     opOpenChange,
     onConfirm,
 }: DeleteConfirmProps) => {
@@ -32,8 +36,8 @@ const DeleteConfirm = ({
                     <DialogClose asChild>
                         <Button variant={"secondary"}>Cancel</Button>
                     </DialogClose>
-                    <Button variant={"destructive"} onClick={onConfirm}>
-                        Delete
+                    <Button variant={"destructive"} onClick={onConfirm} disabled={deleteProcessing}>
+                        {deleteProcessing && <Spinner />} Delete
                     </Button>
                 </div>
             </DialogContent>

@@ -21,6 +21,7 @@ export default function useContacts() {
     const [selectedAllItems, setSelectedAllItems] = useState<boolean>(false);
     const [deleteIds, setDeleteIds] = useState<number[]>([]);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteProcessing, setDeleteProcessing] = useState(false);
 
     const contacts_resource = usePage().props.data as ResourceData;
 
@@ -36,6 +37,7 @@ export default function useContacts() {
 
     const deleteItem = () => {
         if (deleteIds.length > 0) {
+            setDeleteProcessing(true)
             router.post(
                 contacts.bulkDelete(),
                 { ids: deleteIds },
@@ -45,7 +47,11 @@ export default function useContacts() {
                         setDeleteIds([]);
                         setSelectedItems([]);
                         setSelectedAllItems(false);
+                        setDeleteProcessing(false)
                     },
+                    onError:() => {
+                        setDeleteProcessing(false)
+                    }
                 },
             );
         }
@@ -129,6 +135,8 @@ export default function useContacts() {
         setSelectedItems,
         selectedAllItems,
         setSelectedAllItems,
+        deleteProcessing,
+        setDeleteProcessing,
         deleteDialogOpen,
         setDeleteDialogOpen,
         deleteItem,
