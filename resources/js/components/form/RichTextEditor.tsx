@@ -20,20 +20,20 @@ import {
     Strikethrough,
     Undo,
 } from 'lucide-react';
-interface TipTapProps {
+interface RichTextEditorProps {
     content?: string;
     onChange?: (content: string) => void;
     placeholder?: string;
     editable?: boolean;
     className?: string;
 }
-function TipTap({
+function RichTextEditor({
     content = '',
     onChange,
     placeholder = 'Start typing...',
     editable = true,
     className,
-}: TipTapProps) {
+}: RichTextEditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -247,4 +247,4 @@ function TipTap({
         </div>
     );
 }
-export { TipTap, type TipTapProps };
+export { RichTextEditor, type RichTextEditorProps };

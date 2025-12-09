@@ -22,8 +22,8 @@ import {
 } from 'lucide-react';
 import EmailActiviryChart, {
     emailActivityChartDataProps,
-} from './EmailActiviryChart';
-import RecentCampaignsTable from './RecentCampaignsTable';
+} from './partials/EmailActiviryChart';
+import RecentCampaignsTable from './partials/RecentCampaignsTable';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -60,7 +60,7 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ">
+                <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <Card>
                         <CardHeader>
                             <CardDescription>

@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ import { BreadcrumbItem } from '@/types';
 import { Campaign } from '@/types/app';
 import { Head, Link } from '@inertiajs/react';
 import { List } from 'lucide-react';
+import RecipientStatusBadge from './partials/RecipientStatusBadge';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -172,22 +174,7 @@ const Show = ({ campaign }: Props) => {
                                                                             </div>
                                                                         </TableCell>
                                                                         <TableCell>
-                                                                            <Badge
-                                                                                variant={
-                                                                                    recipient.status ==
-                                                                                    'failed'
-                                                                                        ? 'destructive'
-                                                                                        : recipient.status ==
-                                                                                            'pending'
-                                                                                          ? 'secondary'
-                                                                                          : 'outline'
-                                                                                }
-                                                                                className=' capitalize'
-                                                                            >
-                                                                                {
-                                                                                    recipient.status
-                                                                                }
-                                                                            </Badge>
+                                                                            <RecipientStatusBadge status={recipient.status}/>
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             {recipient.sent_at && (
@@ -204,7 +191,11 @@ const Show = ({ campaign }: Props) => {
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             {recipient.response && (
-                                                                                <Badge variant={'secondary'}>
+                                                                                <Badge
+                                                                                    variant={
+                                                                                        'secondary'
+                                                                                    }
+                                                                                >
                                                                                     {
                                                                                         recipient.response
                                                                                     }

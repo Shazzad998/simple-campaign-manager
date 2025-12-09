@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\CampaignRecipientStatus;
 use App\Models\Campaign;
 use App\Models\CampaignRecipient;
 use App\Models\Contact;
@@ -40,8 +41,8 @@ class AnalyticsService
     public function emailStats()
     {
         $total = CampaignRecipient::count();
-        $sent = CampaignRecipient::where('status', 'sent')->count();
-        $failed = CampaignRecipient::where('status', 'failed')->count();
+        $sent = CampaignRecipient::where('status', CampaignRecipientStatus::SENT)->count();
+        $failed = CampaignRecipient::where('status', CampaignRecipientStatus::FAILED)->count();
 
         return [
             'sent' => $sent,
@@ -54,18 +55,25 @@ class AnalyticsService
     {
         $startDate = Carbon::today()->subDays(6);
 
-        $raw = CampaignRecipient::selectRaw("
-            DATE(
-                CASE 
-                    WHEN status = 'sent' THEN sent_at
-                    ELSE created_at
-                END
-            ) AS date,
-            SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) AS sent,
-            SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failed
-        ")
+        $raw = CampaignRecipient::selectRaw(
+            "
+        DATE(
+            CASE 
+                WHEN status = ? THEN sent_at
+                ELSE created_at
+            END
+        ) AS date,
+        SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) AS sent,
+        SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) AS failed
+    ",
+            [
+                CampaignRecipientStatus::SENT->value,
+                CampaignRecipientStatus::SENT->value,
+                CampaignRecipientStatus::FAILED->value,
+            ]
+        )
             ->where(function ($q) use ($startDate) {
-                $q->whereDate('sent_at', '>=', $startDate)  
+                $q->whereDate('sent_at', '>=', $startDate)
                     ->orWhereDate('created_at', '>=', $startDate);
             })
             ->groupBy('date')
@@ -122,8 +130,8 @@ class AnalyticsService
             ->take($limit)
             ->withCount([
                 'recipients as recipient_count',
-                'recipients as success_count' => fn($q) => $q->where('status', 'sent'),
-                'recipients as failed_count'  => fn($q) => $q->where('status', 'failed'),
+                'recipients as success_count' => fn($q) => $q->where('status', CampaignRecipientStatus::SENT),
+                'recipients as failed_count'  => fn($q) => $q->where('status', CampaignRecipientStatus::FAILED),
             ])
             ->get();
     }

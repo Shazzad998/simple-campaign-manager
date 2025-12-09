@@ -1,5 +1,4 @@
-import DataTable from '@/components/custom/DataTable';
-import DeleteConfirm from '@/components/custom/DeleteConfirm';
+
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -8,7 +7,9 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { UserPlus2 } from 'lucide-react';
 import Form from './Form';
-import useContacts from './partials/useContacts';
+import useContacts from './hooks/useContacts';
+import DeleteConfirm from '@/components/common/DeleteConfirm';
+import DataTable from '@/components/data-table/DataTable';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,7 +28,6 @@ const Index = () => {
         formOpen,
         setFormOpen,
         contact,
-        setContact,
         selectedItems,
         setSelectedItems,
         selectedAllItems,

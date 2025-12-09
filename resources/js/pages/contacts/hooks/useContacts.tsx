@@ -8,7 +8,6 @@ import {
     DataTableBulkAction,
     DataTableColumn,
     ResourceData,
-    User,
 } from '@/types';
 import { Contact } from '@/types/app';
 import { router, usePage } from '@inertiajs/react';

@@ -3,12 +3,10 @@ import { BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Mails, Plus, UserPlus2 } from 'lucide-react';
-import DataTable from '@/components/custom/DataTable';
-import DeleteConfirm from '@/components/custom/DeleteConfirm';
-import useCustomers from './partials/useCampaigns';
-import useCampaigns from './partials/useCampaigns';
+import { Mails } from 'lucide-react';
 import campaigns from '@/routes/campaigns';
+import useCampaigns from './hooks/useCampaigns';
+import DataTable from '@/components/data-table/DataTable';
 
 
 const breadcrumbs: BreadcrumbItem[] = [

@@ -1,6 +1,7 @@
-import { MultiSelect } from '@/components/custom/MultiSelect';
+
+import { MultiSelect } from '@/components/form/MultiSelect';
+import { RichTextEditor } from '@/components/form/RichTextEditor';
 import InputError from '@/components/input-error';
-import { TipTap } from '@/components/TipTap';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -123,7 +124,7 @@ const Create = ({ contactOptions }: CreateProps) => {
                                 <div className="grid content-start gap-2">
                                     <Label htmlFor="body">Campaign Body</Label>
                                     <div className="grid gap-px">
-                                        <TipTap
+                                        <RichTextEditor
                                             content={data.body}
                                             onChange={(value) => setData('body', value)}
                                             placeholder="Start typing your content here..."

@@ -28,8 +28,8 @@ import { EllipsisVertical } from 'lucide-react';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import DataPagination from './DataPagination';
-import { DatePickerWithRange } from './DatePickerWithRange';
 import TableColumnHeader from './TableColumnHeader';
+import { DatePickerWithRange } from '../form/DatePickerWithRange';
 
 const DataTable = ({
     resource,

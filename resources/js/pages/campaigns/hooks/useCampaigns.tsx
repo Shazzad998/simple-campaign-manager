@@ -1,12 +1,10 @@
 import { Badge } from '@/components/ui/badge';
 import campaigns from '@/routes/campaigns';
 import {
-    confirmDeleteItem,
     DataTableAction,
     DataTableBulkAction,
     DataTableColumn,
     ResourceData,
-    User,
 } from '@/types';
 import { CampaignListItem } from '@/types/app';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -44,6 +42,7 @@ export default function useCampaigns() {
             field: 'action',
             actions: (item: any) => {
                 return actions.filter((action) => {
+                    // place some logic to hide some actions based on row data
                     return true;
                 });
             },

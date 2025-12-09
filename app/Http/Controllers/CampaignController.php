@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\CampaignData;
+use App\Enums\CampaignRecipientStatus;
 use App\Models\Campaign;
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
@@ -29,8 +30,8 @@ class CampaignController extends Controller
         $query = Campaign::query()
             ->withCount([
                 'recipients as recipient_count',
-                'recipients as success_count' => fn($q) => $q->where('status', 'sent'),
-                'recipients as failed_count'  => fn($q) => $q->where('status', 'failed'),
+                'recipients as success_count' => fn($q) => $q->where('status', CampaignRecipientStatus::SENT),
+                'recipients as failed_count'  => fn($q) => $q->where('status', CampaignRecipientStatus::FAILED),
             ])
             ->when($request->search, function ($query, $search) {
                 $query->where('subject', 'like', "%{$search}%")

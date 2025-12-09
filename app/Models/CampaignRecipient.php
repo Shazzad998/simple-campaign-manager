@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CampaignRecipientStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,7 @@ class CampaignRecipient extends Model
     {
         return [
             'sent_at' => 'datetime',
+            'status' => CampaignRecipientStatus::class,
         ];
     }
 

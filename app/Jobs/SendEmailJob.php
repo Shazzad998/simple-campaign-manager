@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\CampaignRecipientStatus;
 use App\Models\Campaign;
 use App\Models\CampaignRecipient;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,7 +27,7 @@ class SendEmailJob implements ShouldQueue
             $success = random_int(0, 100) > 15;
 
             $this->recipient->update([
-                'status' => $success ? 'sent' : 'failed',
+                'status' => $success ? CampaignRecipientStatus::SENT : CampaignRecipientStatus::FAILED,
                 'response' => $success ? 'OK (simulated)' : 'Simulated failure',
                 'sent_at' => $success ? now() : null,
             ]);
