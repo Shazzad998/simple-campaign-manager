@@ -143,6 +143,10 @@ simple-campaign-manager/
 
 ## Installation
 
+### ⚠️ PHP Version Requirement
+
+This project requires **PHP 8.4 or higher**.
+
   
 
 ### Clone
@@ -221,7 +225,6 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 ```
-
 Or if you want to use **SQLite**, configure your `.env` like this:
 ``` env
 
