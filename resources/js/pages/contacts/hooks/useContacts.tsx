@@ -52,7 +52,6 @@ export default function useContacts() {
     };
 
     const handleCreate = () => {setContact(null); setFormOpen(true)};
-    const handleShow = (item: any) => router.get(contacts.show(item.id));
     const handleEdit = (item: any) => { setContact(item); setFormOpen(true)};
 
     const bulkActions: DataTableBulkAction[] = [
@@ -138,6 +137,5 @@ export default function useContacts() {
         columns,
         handleCreate,
         handleEdit,
-        handleShow,
     };
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Actions\Campaigns\CreateCampaign;
 use App\Data\CampaignData;
 use App\Jobs\SendCampaignJob;
+use Stevebauman\Purify\Facades\Purify;
 
 class CampaignService
 {
@@ -14,14 +15,20 @@ class CampaignService
     public function __construct(private CreateCampaign $createAction) {}
 
 
-    public function createAndDispatch(CampaignData $data, ?int $userId = null)
+    public function createAndDispatch(array $data, ?int $userId = null)
     {
-        $campaign = $this->createAction->handle($data, $userId);
+         $campaignData = new CampaignData(
+                $data['subject'],
+                Purify::clean($data['body']),
+                $data['recipients']
+            );
+            
+        //create campaign
+        $campaign = $this->createAction->handle($campaignData, $userId);
 
-
+        //dispatch email sending
         SendCampaignJob::dispatch($campaign);
-
-
+        
         return $campaign;
     }
 }

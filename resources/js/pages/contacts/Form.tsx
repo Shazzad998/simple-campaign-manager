@@ -62,7 +62,7 @@ const Form = ({ open, onOpenChange, contact }: Props) => {
                     className="flex h-full w-full flex-col"
                 >
                     <SheetHeader>
-                        <SheetTitle>
+                        <SheetTitle className=' text-2xl'>
                             {contact ? 'Edit' : 'Create'} Contact
                         </SheetTitle>
                         <SheetDescription>

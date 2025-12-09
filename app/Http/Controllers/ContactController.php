@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Contacts\CreateContact;
+use App\Actions\Contacts\DeleteContact;
+use App\Actions\Contacts\GetContacts;
+use App\Actions\Contacts\UpdateContact;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\Contact\ContactResource;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -15,23 +18,9 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, GetContacts $getContacts)
     {
-
-        $query = Contact::query()
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            })
-            ->when($request->from, function ($query, $from) {
-                $fromDate = Carbon::parse($from);
-                $query->where('created_at', '>=', $fromDate->startOfDay());
-            })
-            ->when($request->to, function ($query, $to) {
-                $toDate = Carbon::parse($to);
-                $query->where('created_at', '<=', $toDate->endOfDay());
-            })
-            ->orderBy($request->sort_by ?? 'id', $request->sort_direction ?? 'desc');
+        $query = $getContacts->handle($request);
         $ids = $query->pluck('id');
         $contacts = $query->paginate($request->per_page ?? 10)
             ->withQueryString();
@@ -47,10 +36,10 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContactRequest $request)
+    public function store(StoreContactRequest $request, CreateContact $createContact)
     {
         try {
-            Contact::create($request->validated());
+            $createContact->handle($request->validated());
             return redirect()->back()->with('success', 'Contact added successfully');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -59,20 +48,12 @@ class ContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Contact $contact)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact, UpdateContact $updateContact)
     {
         try {
-            $contact->update($request->validated());
+            $$updateContact->handle($contact, $request->validated());
             return redirect()->back()->with('success', 'Contact updated successfully');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -80,22 +61,14 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Contact $contact)
-    {
-        //
-    }
 
-
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request, DeleteContact $deleteContact)
     {
         $request->validate([
             'ids' => 'required|array',
             'ids.*' => 'required|exists:contacts,id',
         ]);
-        Contact::whereIn('id', $request->ids)->delete();
+        $deleteContact->handle($request->ids);
         return redirect()->back()->with('success', 'Contact deleted successfully');
     }
 }
